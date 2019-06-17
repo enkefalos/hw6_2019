@@ -23,7 +23,7 @@ class Board:
     def create_vessels(self, vessel_numbers: tuple):
         vessel_number = 0
         for level in vessel_numbers:
-            for vessel in range(1,vessel_numbers(level)):
+            for vessel in range(1,vessel_numbers[level]):
                 vessel_number += 1
                 if level == 0:
                     new_vessel = Submarine(vessel_number)
@@ -47,16 +47,17 @@ class Board:
         new_vessel = General(vessel_number)
         self.vessels.append(new_vessel)
         self.place_vessel(new_vessel, randint(0,level))
-          
+      
     def place_vessel(self, vessel, level: int):
         success = False
         while ~success:
+            # add 50% chance to transpose
             x_coordinate = randint(0, self.board_size[0])
-            x_max = x_coordinate + vessel.area.shape[0]
+            x_max = x_coordinate + vessel.area.shape[0]-1
             if x_max >= self.board_size[0]:
                 pass
             y_coordinate = randint(0, self.board_size[1])
-            y_max = y_coordinate + vessel.area.shape[1]
+            y_max = y_coordinate + vessel.area.shape[1]-1
             if y_max >= self.board_size[1]:
                 pass
             
@@ -110,25 +111,25 @@ class Vessel():
 class Submarine(Vessel):
     """ Level 0 Vessel """
     def __init__(self, vessel_number: int):
-        super.__init__(vessel_number)
+        super().__init__(vessel_number)
         self.area = np.array([[1, 1, 1]])
     
 class Destroyer(Vessel):
     """ Level 1 Vessel """
     def __init__(self, vessel_number: int):
-        super.__init__(vessel_number)
+        super().__init__(vessel_number)
         self.area =np.array([[1], [1], [1], [1]])
 
 class Jet(Vessel):
     """ Level 2 Vessel """
     def __init__(self, vessel_number: int):
-        super.__init__(vessel_number)
+        super().__init__(vessel_number)
         self.area = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0], [0, 1, 0]])
 
 class General(Vessel):
     """ The General """
     def __init__(self, vessel_number: int):
-        super.__init__(vessel_number)
+        super().__init__(vessel_number)
         self.area = np.array([1])
 
 
@@ -177,7 +178,7 @@ class GameLoop:
             
         if len(digits_in_input) == 0:
             if player_input == 'show':
-                #show board and if thers tiem show where you bombed
+                self.show_board()
                 return False
             if player_input == 'quit':
                 raise SystemExit()
@@ -185,3 +186,6 @@ class GameLoop:
         print("Input invalid, try again.")
         self.is_it_player1s_turn =  ~self.is_it_player1s_turn
         return False
+
+    def show_board(self):
+        pass
